@@ -1,4 +1,65 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/19 19:18:42 by heleneherin       #+#    #+#             */
+/*   Updated: 2020/11/20 09:45:43 by heleneherin      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo1.h"
+
+long				ms_time(void)
+{
+	long ms;
+	struct timeval value;
+
+	ms = 0;
+	gettimeofday(&value, NULL);
+	ms = value.tv_sec * 1000;
+	ms += value.tv_usec / 1000;
+	return (ms);
+}
+
+int p_error(const char *s)
+{
+	int i;
+
+	i = -1;
+	while (s[++i])
+		write(2, &s[i], 1);
+	write(2, "\n", 1);
+	return (0);
+}
+
+int		str_digit(const char *str)
+{
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
+void	better_sleep(long d)
+{
+	struct timeval tmp;
+	struct timeval start;
+
+	gettimeofday(&start, NULL);
+	while (1)
+	{
+		usleep(50);
+		gettimeofday(&tmp, NULL);
+		if ((((long)(tmp.tv_sec - start.tv_sec)) * 1000000 + ((long)(tmp.tv_usec - start.tv_usec))) >= d)
+			return ;
+	}
+}
 
 static int		ft_nblen(unsigned int nb)
 {

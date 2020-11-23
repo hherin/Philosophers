@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 19:03:20 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/23 19:03:32 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/23 19:13:39 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,4 @@ void	pth_create(t_philo **philo, t_start *sdata)
 	i = -1;
 	while (++i < sdata->nb_philo) // join les threads
 		pthread_join((*philo)[i].thrd, NULL);
-	// printf("ICI2\n");
-	// while (g_stop)
-	// 	;
-	// printf("ICI\n");
-	// i = -1;
-	// while (++i < sdata->nb_philo) // join les threads
-	// 	pthread_detach((*philo)[i].thrd);
 }

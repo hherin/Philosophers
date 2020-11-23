@@ -1,9 +1,8 @@
 HDRS	=	philo1.h \
-			struct.h
 
 SRCS	=	main.c \
 			init.c \
-			state.c \
+			msg.c \
 			routine.c \
 			utils.c \
 

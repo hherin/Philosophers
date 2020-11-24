@@ -9,7 +9,7 @@
 
 int		g_stop;
 
-#include <stdio.h>
+#include <stdio.h> // SUPP
 typedef struct		s_start
 {
 	long			time;

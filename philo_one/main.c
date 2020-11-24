@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 18:49:19 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/24 13:35:18 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/24 13:39:53 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ int main(int ac, char **av)
 		return (0);
 	if (!(philo = (t_philo*)malloc(sizeof(t_philo) * sdata.nb_philo)))
 		return (p_error("Malloc failed"));
-	if (!philo_init(&philo, &sdata))
-		return (0);
+	philo_init(&philo, &sdata));
 	sdata.time = ms_time();
 	pth_create(&philo, &sdata);
 	free(philo);

@@ -5,12 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/19 19:02:56 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/24 14:09:31 by heleneherin      ###   ########.fr       */
+/*   Created: 2020/11/24 13:50:09 by heleneherin       #+#    #+#             */
+/*   Updated: 2020/11/24 14:15:30 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo1.h"
+#include "philo2.h"
+
 
 static void	has_eaten_enough(t_philo *ph)
 {
@@ -18,30 +19,21 @@ static void	has_eaten_enough(t_philo *ph)
 	if (ph->meals > 0 && ph->meals == ph->sdata->nb_meals)
 	{
 		ph->sdata->counter--;
-		pthread_mutex_lock(&ph->sdata->stop);
+		sem_wait(ph->sdata->print);
 		if (!ph->sdata->counter && !g_stop)
 		{
 			g_stop = 1;
 			write(1, "All has eaten\n", 14);
 		}
-		pthread_mutex_unlock(&ph->sdata->stop);
+		sem_post(ph->sdata->print);
 	}
 }
 
-static void	is_eating(t_philo *ph, int id)
+static void	is_eating(t_philo *ph, t_start *sdata)
 {
-	int lock[2];
-	int *smeals;
-	t_philo *ph_tab;
-
-	smeals = &ph->sdata->nb_meals;
-	ph_tab = (t_philo*)(ph->t_save);
-	lock[0] = (!(id % 2)) ? id + 1 : id;					// ph pairs prenne a gauche impairs = droite
-	(lock[0] == ph->sdata->nb_philo) ? lock[0] = 0 : 0;
-	lock[1] = (!(id % 2)) ? id : id - 1;
-	pthread_mutex_lock(&ph_tab[lock[0]].fork);				//take fork 1
+	sem_wait(sdata->fork);				//take fork 1
 	(!g_stop) ? print_msg(" has taken a fork\n", ph->sdata, ph) : 0;
-	pthread_mutex_lock(&ph_tab[lock[1]].fork);				//take fork 2
+	sem_wait(sdata->fork);				//take fork 2
 	(!g_stop) ? print_msg(" has taken a fork\n", ph->sdata, ph) : 0;
 	(!g_stop) ? print_msg(" is eating\n", ph->sdata, ph) : 0;
 	has_eaten_enough(ph);
@@ -49,17 +41,10 @@ static void	is_eating(t_philo *ph, int id)
 	better_sleep(ph->sdata->eat * 1000);
 }
 
-static void	is_sleeping(t_philo *ph, int id)
+static void	is_sleeping(t_philo *ph, t_start *sdata)
 {
-	int unlock[2];
-	t_philo *ph_tab;
-
-	ph_tab = (t_philo*)(ph->t_save);
-	unlock[0] = (!(id % 2)) ? id + 1 : id;
-	(unlock[0] == ph->sdata->nb_philo) ? unlock[0] = 0 : 0;
-	unlock[1] = (!(id % 2)) ? id : id - 1;
-	pthread_mutex_unlock(&ph_tab[unlock[0]].fork);
-	pthread_mutex_unlock(&ph_tab[unlock[1]].fork);
+	sem_post(sdata->fork);
+	sem_post(sdata->fork);
 	(!g_stop) ? print_msg(" is sleeping\n", ph->sdata, ph) : 0;
 	better_sleep(ph->sdata->eat * 1000);
 }
@@ -77,14 +62,14 @@ void	*time_counter(void *philo)
 		ph->time[1] = ms_time();
 		if (ph->time[1] - ph->time[0] > data->die)
 		{
-			pthread_mutex_lock(&data->stop);
+			sem_wait(data->print);
 			if (!g_stop && data->counter)
 			{
 				g_stop = 1;
 				usleep(100);
 				print_msg(" died\n", data, ph);
 			}
-			pthread_mutex_unlock(&data->stop);
+			sem_post(data->print);
 		}
 	}
 	return (NULL);
@@ -101,8 +86,8 @@ void	*philo_routine(void *philo)
 	pthread_create(&th_died, NULL, time_counter, ph);
 	while (!g_stop)
 	{
-		is_eating(ph, ph->id);
-		is_sleeping(ph, ph->id);
+		is_eating(ph, ph->sdata);
+		is_sleeping(ph, ph->sdata);
 		(!g_stop) ? print_msg(" is thinking\n", ph->sdata, ph) : 0;
 		usleep(100);
 	}

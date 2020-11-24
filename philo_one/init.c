@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 19:03:20 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/23 19:13:39 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/23 20:43:08 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,12 @@ void	pth_create(t_philo **philo, t_start *sdata)
 	i = -1;
 	while (++i < sdata->nb_philo) // join les threads
 		pthread_join((*philo)[i].thrd, NULL);
+	i = -1;
+	while (++i < sdata->nb_philo)
+	{
+		pthread_mutex_destroy(&(*philo)[i].fork);
+		pthread_mutex_destroy(&(*philo)[i].pick);
+	}
+	pthread_mutex_destroy(&sdata->print);
+	pthread_mutex_destroy(&sdata->stop);
 }

@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 18:49:19 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/23 18:27:29 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/23 20:43:40 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@ int main(int ac, char **av)
 	philo_init(&philo, &sdata);
 	sdata.time = ms_time();
 	pth_create(&philo, &sdata);
+	free(philo);
 	return (1);
 }

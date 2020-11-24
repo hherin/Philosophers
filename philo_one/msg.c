@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 13:05:17 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/23 19:48:22 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/23 20:48:40 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	nblen(long nb)
 	return (length);
 }
 
-int	print_msg(const char *str, t_start **sdata, t_philo **ph)
+int	print_msg(const char *str, t_start *sdata, t_philo *ph)
 {
 	long current_time;
 	int		nb_len;
@@ -58,18 +58,18 @@ int	print_msg(const char *str, t_start **sdata, t_philo **ph)
 	i = 0;
 	while (i < 100)
 		msg[i++] = '\0';
-	current_time = ms_time() - (*sdata)->time;
+	current_time = ms_time() - sdata->time;
 	nb_len = nblen(current_time);
 	digitcopy(msg, current_time, 0, nb_len - 1);
 	stgcopy(msg, "ms\t  ", nb_len);
 	nb_len += 4;
-	digitcopy(msg, (*ph)->id + 1, nb_len - 1, nblen((*ph)->id + 1));
-	nb_len += nblen((*ph)->id + 1);
+	digitcopy(msg, ph->id + 1, nb_len - 1, nblen(ph->id + 1));
+	nb_len += nblen(ph->id + 1);
 	stgcopy(msg, str, nb_len);
-	if (pthread_mutex_lock(&(*sdata)->print))
+	if (pthread_mutex_lock(&sdata->print))
 		return (p_error("Print mutex lock issue"));
 	write(1,msg, ft_strlen(msg));
-	if (pthread_mutex_unlock(&(*sdata)->print))
+	if (pthread_mutex_unlock(&sdata->print))
 		return (p_error("Print mutex unlock issue"));
 	return (1);
 }

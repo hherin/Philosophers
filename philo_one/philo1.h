@@ -40,7 +40,7 @@ int		ft_atoi(const char *str);
 int		p_error(const char *s);
 long	ms_time(void);
 size_t ft_strlen(const char *str);
-int		print_msg(const char *str, t_start **sdata, t_philo **ph);
+int		print_msg(const char *str, t_start *sdata, t_philo *ph);
 
 int		sdata_init(t_start *start, char **av, int ac);
 void	pth_create(t_philo **philo, t_start *sdata);

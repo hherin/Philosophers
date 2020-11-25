@@ -17,11 +17,9 @@ typedef struct		s_start
 	long			time;
 	sem_t			*fork;
 	sem_t			*print;
+	sem_t			*die;
 	int				nb_philo;
-	int				die;
-	int				eat;
-	int				sleep;
-	int				nb_meals;
+	int				state[4];
 	int				start;
 	int				counter;
 }					t_start;
@@ -34,6 +32,8 @@ typedef struct		s_philo
 	pthread_t		thrd;
 	t_start			*sdata;
 }					t_philo;
+
+enum e_state {DIE, EAT, SLEEP, MEALS};
 
 int		ft_atoi(const char *str);
 int		p_error(const char *s);

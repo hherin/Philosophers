@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 19:03:20 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/24 16:33:02 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/25 15:36:21 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,23 @@ int	sdata_init(t_start *start, char **av, int ac)
 {
 	if (ac < 5)
 		return (p_error("Need arguments"));
-	if (!str_digit(av[1]) || !(start->nb_philo = ft_atoi(av[1])))
-		return (p_error("Wrong philosopher input"));
-	if (!str_digit(av[2]) || !(start->die = ft_atoi(av[2])))
-		return (p_error("Wrong died input"));
-	if (!str_digit(av[3]) || !(start->eat = ft_atoi(av[3])))
-		return (p_error("Wrong eat input"));
-	if (!str_digit(av[4]) || !(start->sleep = ft_atoi(av[4])))
-		return (p_error("Wrong eat input"));
-	start->nb_meals = (ac > 5) ? ft_atoi(av[5]) : -1;
-	if (!start->nb_meals)
-		return (p_error("Number of meals can't be negative"));
-	start->fork = sem_open("FORK", O_CREAT, (unsigned int)start->nb_philo);
-	start->print = sem_open("PRINT", O_CREAT, 1);
 	sem_unlink("FORK");
 	sem_unlink("PRINT");
+	sem_unlink("DIE");
+	if (!str_digit(av[1]) || !(start->nb_philo = ft_atoi(av[1])))
+		return (p_error("Wrong philosopher input"));
+	if (!str_digit(av[2]) || !(start->state[DIE] = ft_atoi(av[2])))
+		return (p_error("Wrong died input"));
+	if (!str_digit(av[3]) || !(start->state[EAT] = ft_atoi(av[3])))
+		return (p_error("Wrong eat input"));
+	if (!str_digit(av[4]) || !(start->state[SLEEP] = ft_atoi(av[4])))
+		return (p_error("Wrong eat input"));
+	start->state[MEALS] = (ac > 5) ? ft_atoi(av[5]) : -1;
+	if (!start->state[MEALS])
+		return (p_error("Number of meals can't be negative"));
+	start->fork = sem_open("FORK", O_CREAT, 0644, (unsigned int)start->nb_philo / 2);
+	start->print = sem_open("PRINT", O_CREAT, 0644, 1);
+	start->die = sem_open("DIE", O_CREAT, 0644, 1);
 	start->counter = start->nb_philo;
 	return (1);
 }

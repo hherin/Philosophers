@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:50:09 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/24 14:15:30 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/25 15:38:21 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void	has_eaten_enough(t_philo *ph)
 {
 	ph->meals++;
-	if (ph->meals > 0 && ph->meals == ph->sdata->nb_meals)
+	if (ph->meals > 0 && ph->meals == ph->sdata->state[MEALS])
 	{
 		ph->sdata->counter--;
 		sem_wait(ph->sdata->print);
@@ -33,20 +33,18 @@ static void	is_eating(t_philo *ph, t_start *sdata)
 {
 	sem_wait(sdata->fork);				//take fork 1
 	(!g_stop) ? print_msg(" has taken a fork\n", ph->sdata, ph) : 0;
-	sem_wait(sdata->fork);				//take fork 2
 	(!g_stop) ? print_msg(" has taken a fork\n", ph->sdata, ph) : 0;
 	(!g_stop) ? print_msg(" is eating\n", ph->sdata, ph) : 0;
 	has_eaten_enough(ph);
 	ph->time[0] = ms_time();
-	better_sleep(ph->sdata->eat * 1000);
+	better_sleep(ph->sdata->state[EAT] * 1000);
 }
 
 static void	is_sleeping(t_philo *ph, t_start *sdata)
 {
 	sem_post(sdata->fork);
-	sem_post(sdata->fork);
 	(!g_stop) ? print_msg(" is sleeping\n", ph->sdata, ph) : 0;
-	better_sleep(ph->sdata->eat * 1000);
+	better_sleep(ph->sdata->state[EAT] * 1000);
 }
 
 void	*time_counter(void *philo)
@@ -60,16 +58,16 @@ void	*time_counter(void *philo)
 	while (!g_stop)
 	{
 		ph->time[1] = ms_time();
-		if (ph->time[1] - ph->time[0] > data->die)
+		if (ph->time[1] - ph->time[0] > data->state[DIE])
 		{
-			sem_wait(data->print);
+			sem_wait(data->die);
 			if (!g_stop && data->counter)
 			{
 				g_stop = 1;
 				usleep(100);
 				print_msg(" died\n", data, ph);
 			}
-			sem_post(data->print);
+			sem_post(data->die);
 		}
 	}
 	return (NULL);

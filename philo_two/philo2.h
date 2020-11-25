@@ -1,5 +1,5 @@
-#ifndef PHILO1_H
-# define PHILO1_H
+#ifndef PHILO2_H
+# define PHILO2_H
 
 #include <sys/time.h>
 #include <pthread.h>

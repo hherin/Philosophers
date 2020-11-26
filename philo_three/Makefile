@@ -15,7 +15,7 @@ CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror -g3 -fsanitize=address
 
 ${NAME}: ${OBJS}
-	${CC} ${OBJS} -o ${NAME} \
+	${CC} -pthread ${OBJS} -o ${NAME} \
 	${CFLAGS} \
 
 ${OBJS}: ${HDRS}

@@ -8,6 +8,8 @@
 #include <time.h>
 #include <signal.h>
 #include <semaphore.h>
+#include <wait.h>
+#include <fcntl.h>
 
 #include <stdio.h> // SUPP
 

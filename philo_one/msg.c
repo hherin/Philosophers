@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 13:05:17 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/23 20:48:40 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/26 20:27:51 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	print_msg(const char *str, t_start *sdata, t_philo *ph)
 	stgcopy(msg, str, nb_len);
 	if (pthread_mutex_lock(&sdata->print))
 		return (p_error("Print mutex lock issue"));
-	write(1,msg, ft_strlen(msg));
+	(g_stop != 2) ? write(1,msg, ft_strlen(msg)) : 0;
 	if (pthread_mutex_unlock(&sdata->print))
 		return (p_error("Print mutex unlock issue"));
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:50:09 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/27 00:04:08 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/27 00:15:54 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static void	*time_counter(void *philo)
 		if ((*ph)->time[1] - (*ph)->time[0] > data->state[DIE])
 		{
 			sem_wait(data->die);
-			if (!(*ph)->stop && data->counter)
+			if (!(*ph)->stop)
 			{
 				(*ph)->stop = 1;
 				usleep(100);

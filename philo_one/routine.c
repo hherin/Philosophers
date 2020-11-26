@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 19:02:56 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/26 20:33:31 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/26 20:48:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ static void	is_eating(t_philo *ph, int id)
 	(lock[0] == ph->sdata->nb_philo) ? lock[0] = 0 : 0;
 	lock[1] = (!(id % 2)) ? id : id - 1;
 	pthread_mutex_lock(&ph_tab[lock[0]].fork);				//take fork 1
-	print_msg(" has taken a fork\n", ph->sdata, ph) : 0;
+	print_msg(" has taken a fork\n", ph->sdata, ph);
 	pthread_mutex_lock(&ph_tab[lock[1]].fork);				//take fork 2
-	print_msg(" has taken a fork\n", ph->sdata, ph) : 0;
-	print_msg(" is eating\n", ph->sdata, ph) : 0;
+	print_msg(" has taken a fork\n", ph->sdata, ph);
+	print_msg(" is eating\n", ph->sdata, ph);
 	has_eaten_enough(ph);
 	ph->time[0] = ms_time();
 	better_sleep(ph->sdata->eat * 1000);
@@ -60,7 +60,7 @@ static void	is_sleeping(t_philo *ph, int id)
 	unlock[1] = (!(id % 2)) ? id : id - 1;
 	pthread_mutex_unlock(&ph_tab[unlock[0]].fork);
 	pthread_mutex_unlock(&ph_tab[unlock[1]].fork);
-	print_msg(" is sleeping\n", ph->sdata, ph) : 0;
+	print_msg(" is sleeping\n", ph->sdata, ph);
 	better_sleep(ph->sdata->eat * 1000);
 }
 
@@ -82,7 +82,7 @@ void	*time_counter(void *philo)
 			{
 				g_stop = 1;
 				usleep(100);
-				print_msg(" died\n", data, ph);
+				print_dead(" died\n", data, ph);
 			}
 			pthread_mutex_unlock(&data->stop);
 		}
@@ -103,7 +103,7 @@ void	*philo_routine(void *philo)
 	{
 		is_eating(ph, ph->id);
 		is_sleeping(ph, ph->id);
-		print_msg(" is thinking\n", ph->sdata, ph) : 0;
+		print_msg(" is thinking\n", ph->sdata, ph);
 		usleep(100);
 	}
 	return (NULL);

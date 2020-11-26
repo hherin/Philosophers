@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:49:43 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/24 13:49:49 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/26 21:12:18 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,17 @@ int		ft_atoi(const char *str)
 		str++;
 	}
 	return (nb * signe);
+}
+
+int	nblen(long nb)
+{
+	int length;
+
+	length = (!nb) ? 1 : 0;
+	while (nb)
+	{
+		nb /= 10;
+		length++;
+	}
+	return (length);
 }

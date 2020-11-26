@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:50:09 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/25 15:38:21 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/26 21:13:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,14 @@ static void	has_eaten_enough(t_philo *ph)
 	{
 		ph->sdata->counter--;
 		sem_wait(ph->sdata->print);
+		sem_wait(ph->sdata->die);
 		if (!ph->sdata->counter && !g_stop)
 		{
 			g_stop = 1;
 			write(1, "All has eaten\n", 14);
 		}
 		sem_post(ph->sdata->print);
+		sem_post(ph->sdata->die);
 	}
 }
 
@@ -65,7 +67,7 @@ void	*time_counter(void *philo)
 			{
 				g_stop = 1;
 				usleep(100);
-				print_msg(" died\n", data, ph);
+				print_dead(" died\n", data, ph);
 			}
 			sem_post(data->die);
 		}

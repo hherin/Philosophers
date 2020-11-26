@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 19:03:20 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/26 20:00:36 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/26 21:49:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo3.h"
 
-static int		str_digit(const char *str)
+static int	str_digit(const char *str)
 {
 	while (*str)
 	{
@@ -23,7 +23,7 @@ static int		str_digit(const char *str)
 	return (1);
 }
 
-int	sdata_init(t_start *start, char **av, int ac)
+int			sdata_init(t_start *start, char **av, int ac)
 {
 	if (ac < 5)
 		return (p_error("Need arguments"));
@@ -51,7 +51,7 @@ int	sdata_init(t_start *start, char **av, int ac)
 	return (1);
 }
 
-void 	philo_init(t_philo *philo, t_start *sdata) // ret error
+void 		philo_init(t_philo *philo, t_start *sdata) // ret error
 {
 	int i;
 
@@ -65,11 +65,11 @@ void 	philo_init(t_philo *philo, t_start *sdata) // ret error
 	}
 }
 
-int	philo_create(t_philo *philo, t_start *sdata)
+int			philo_create(t_philo *philo, t_start *sdata)
 {
-	int i;
-	int status;
-	pid_t pid;
+	int		i;
+	int		status;
+	pid_t	pid;
 
 	i = -1;
 	pid = 1;

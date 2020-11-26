@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 19:03:20 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/26 21:49:26 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/27 00:04:28 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int			sdata_init(t_start *start, char **av, int ac)
 	sem_unlink("FORK");
 	sem_unlink("PRINT");
 	sem_unlink("WAIT");
-	sem_unlink("DIE"); ///
 	sem_unlink("MEALS");
+	sem_unlink("DIE");
 	if (!str_digit(av[1]) || !(start->nb_philo = ft_atoi(av[1])))
 		return (p_error("Wrong philosopher input"));
 	if (!str_digit(av[2]) || !(start->state[DIE] = ft_atoi(av[2])))
@@ -45,13 +45,13 @@ int			sdata_init(t_start *start, char **av, int ac)
 		return (p_error("Number of meals can't be negative"));
 	start->fork = sem_open("FORK", O_CREAT, 0644, (unsigned int)start->nb_philo / 2);
 	start->print = sem_open("PRINT", O_CREAT, 0644, 1);
-	start->die = sem_open("DIE", O_CREAT, 0644, 1);
 	start->wait = sem_open("WAIT", O_CREAT, 0644, 0);
 	start->meals = sem_open("MEALS", O_CREAT, 0644, 0);
+	start->die = sem_open("DIE", O_CREAT, 0644, 1);
 	return (1);
 }
 
-void 		philo_init(t_philo *philo, t_start *sdata) // ret error
+void 		philo_init(t_philo *philo, t_start *sdata)
 {
 	int i;
 
@@ -73,7 +73,6 @@ int			philo_create(t_philo *philo, t_start *sdata)
 
 	i = -1;
 	pid = 1;
-	sdata->time = ms_time();
 	while (++i < sdata->nb_philo && pid > 0)
 	{
 		pid = fork();
@@ -92,8 +91,7 @@ int			philo_create(t_philo *philo, t_start *sdata)
 			pthread_create(&sdata->counter, NULL, meals_counter, sdata);
 			pthread_join(sdata->counter, NULL);
 		}
-		waitpid(-1, &status, 0);
-		kill(0, SIGINT);
+		waitpid(0, &status, 0);
 	}
 	return (0);
 }

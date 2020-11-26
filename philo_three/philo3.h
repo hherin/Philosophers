@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo3.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 21:42:22 by user42            #+#    #+#             */
-/*   Updated: 2020/11/26 21:44:09 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/26 23:41:02 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,19 @@
 # include <time.h>
 # include <signal.h>
 # include <semaphore.h>
-# include <wait.h>
+// # include <wait.h>
 # include <fcntl.h>
 
+#include <stdio.h>
 typedef struct	s_start
 {
 	long		time;
 	pthread_t	counter;
 	sem_t		*fork;
 	sem_t		*print;
-	sem_t		*die;
 	sem_t		*wait;
 	sem_t		*meals;
+	sem_t		*die;
 	int			nb_philo;
 	int			state[4];
 }				t_start;
@@ -54,11 +55,13 @@ int		p_error(const char *s);
 long	ms_time(void);
 size_t	ft_strlen(const char *str);
 int		print_msg(const char *str, t_start *sdata, t_philo *ph);
+int		print_dead(const char *str, t_start *sdata, t_philo *ph);
 int		sdata_init(t_start *start, char **av, int ac);
 int		philo_create(t_philo *philo, t_start *sdata);
 void	philo_init(t_philo *philo, t_start *sdata);
 int		philo_routine(t_philo *philo);
 void	better_sleep(long d);
 void	*meals_counter(void *args);
+int		nblen(long nb);
 
 #endif

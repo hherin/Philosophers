@@ -23,12 +23,12 @@ ${OBJS}: ${HDRS}
 all: ${NAME}
 
 clean:
-	rm -f *.o
-	rm -f *.gch
+	@rm -f *.o
+	@rm -f *.gch
 
 fclean:
-	rm -f *.o
-	rm -f *.gch
+	@rm -f *.o
+	@rm -f *.gch
 	rm -f ${NAME}
 
 re: fclean ${NAME}

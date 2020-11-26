@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:50:09 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/26 20:00:17 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/27 00:04:08 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void		*meals_counter(void *args)
 	while (i++ < sdata->nb_philo)
 		sem_wait(sdata->meals);
 	sem_wait(sdata->print);
-	write(1, "All philosophers has eaten enought\n", 35);
+	write(1, "All philosophers has eaten enought\n", 34);
 	kill(0, SIGINT);
 	return (NULL);
 }
@@ -30,9 +30,9 @@ void		*meals_counter(void *args)
 static void	is_eating(t_philo *ph, t_start *sdata)
 {
 	sem_wait(sdata->fork);				//take fork 1
-	(!ph->stop) ? print_msg(" has taken a fork\n", ph->sdata, ph) : 0;
-	(!ph->stop) ? print_msg(" has taken a fork\n", ph->sdata, ph) : 0;
-	(!ph->stop) ? print_msg(" is eating\n", ph->sdata, ph) : 0;
+	print_msg(" has taken a fork\n", ph->sdata, ph);
+	print_msg(" has taken a fork\n", ph->sdata, ph);
+	print_msg(" is eating\n", ph->sdata, ph);
 	ph->meals++;
 	if (ph->meals > 0 && ph->meals == ph->sdata->state[MEALS])
 		sem_post(ph->sdata->meals);
@@ -43,11 +43,11 @@ static void	is_eating(t_philo *ph, t_start *sdata)
 static void	is_sleeping(t_philo *ph, t_start *sdata)
 {
 	sem_post(sdata->fork);
-	(!ph->stop) ? print_msg(" is sleeping\n", ph->sdata, ph) : 0;
+	print_msg(" is sleeping\n", ph->sdata, ph);
 	better_sleep(ph->sdata->state[EAT] * 1000);
 }
 
-void	*time_counter(void *philo)
+static void	*time_counter(void *philo)
 {
 	t_philo **ph;
 	t_start *data;
@@ -65,8 +65,8 @@ void	*time_counter(void *philo)
 			{
 				(*ph)->stop = 1;
 				usleep(100);
-				print_msg(" died\n", data, (*ph));
-				sem_wait(data->print);
+				print_dead(" died", data, (*ph));
+				kill(0, SIGINT);
 			}
 		}
 	}
@@ -84,7 +84,7 @@ int	philo_routine(t_philo *ph)
 	{
 		is_eating(ph, ph->sdata);
 		is_sleeping(ph, ph->sdata);
-		(!ph->stop) ? print_msg(" is thinking\n", ph->sdata, ph) : 0;
+		print_msg(" is thinking\n", ph->sdata, ph);
 		usleep(100);
 	}
 	return (ph->stop);

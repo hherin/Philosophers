@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 13:05:17 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/27 00:01:53 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/27 11:57:50 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void	digitcopy(char dest[100], long nb, int index, int nb_len)
 		nb_len--;
 	}
 }
+
 static void	stgcopy(char dest[100], const char *str, int index)
 {
 	int i;
@@ -35,9 +36,9 @@ static void	stgcopy(char dest[100], const char *str, int index)
 	}
 }
 
-int	print_msg(const char *str, t_start *sdata, t_philo *ph)
+int			print_msg(const char *str, t_start *sdata, t_philo *ph)
 {
-	long current_time;
+	long	current_time;
 	int		nb_len;
 	int		i;
 	char	msg[100];
@@ -54,14 +55,14 @@ int	print_msg(const char *str, t_start *sdata, t_philo *ph)
 	nb_len += nblen(ph->id + 1);
 	stgcopy(msg, str, nb_len);
 	sem_wait(sdata->print);
-	(!ph->stop) ? write(1,msg, ft_strlen(msg)) : 0;
+	(!ph->stop) ? write(1, msg, ft_strlen(msg)) : 0;
 	sem_post(sdata->print);
 	return (1);
 }
 
-int	print_dead(const char *str, t_start *sdata, t_philo *ph)
+int			print_dead(const char *str, t_start *sdata, t_philo *ph)
 {
-	long current_time;
+	long	current_time;
 	int		nb_len;
 	int		i;
 	char	msg[100];
@@ -78,12 +79,12 @@ int	print_dead(const char *str, t_start *sdata, t_philo *ph)
 	nb_len += nblen(ph->id + 1);
 	stgcopy(msg, str, nb_len);
 	sem_wait(sdata->print);
-	write(1,msg, ft_strlen(msg));
+	write(1, msg, ft_strlen(msg));
 	sem_post(sdata->print);
 	return (1);
 }
 
-int p_error(const char *s)
+int			p_error(const char *s)
 {
 	write(2, s, ft_strlen(s));
 	write(2, "\n", 1);

@@ -6,16 +6,16 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:49:43 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/26 23:37:44 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/27 11:53:06 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo3.h"
 
-long				ms_time(void)
+long	ms_time(void)
 {
-	long ms;
-	struct timeval value;
+	struct timeval	value;
+	long			ms;
 
 	ms = 0;
 	gettimeofday(&value, NULL);
@@ -26,22 +26,25 @@ long				ms_time(void)
 
 void	better_sleep(long d)
 {
-	struct timeval tmp;
-	struct timeval start;
+	struct timeval	tmp;
+	struct timeval	start;
 
 	gettimeofday(&start, NULL);
 	while (1)
 	{
 		usleep(50);
 		gettimeofday(&tmp, NULL);
-		if ((((long)(tmp.tv_sec - start.tv_sec)) * 1000000 + ((long)(tmp.tv_usec - start.tv_usec))) >= d)
+		if ((((long)(tmp.tv_sec - start.tv_sec)) * 1000000 +\
+			((long)(tmp.tv_usec - start.tv_usec))) >= d)
 			return ;
 	}
 }
 
-size_t ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (str[i])
 		i++;
 	return (i);
@@ -66,9 +69,9 @@ int		ft_atoi(const char *str)
 	return (nb * signe);
 }
 
-int	nblen(long nb)
+int		nblen(long nb)
 {
-	int length;
+	int	length;
 
 	length = (!nb) ? 1 : 0;
 	while (nb)

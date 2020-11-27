@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 19:03:20 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/27 00:04:28 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/27 11:57:03 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int			sdata_init(t_start *start, char **av, int ac)
 	start->state[MEALS] = (ac > 5) ? ft_atoi(av[5]) : -1;
 	if (!start->state[MEALS])
 		return (p_error("Number of meals can't be negative"));
-	start->fork = sem_open("FORK", O_CREAT, 0644, (unsigned int)start->nb_philo / 2);
+	start->fork = sem_open("FORK", O_CREAT, 0644,\
+		(unsigned int)start->nb_philo / 2);
 	start->print = sem_open("PRINT", O_CREAT, 0644, 1);
 	start->wait = sem_open("WAIT", O_CREAT, 0644, 0);
 	start->meals = sem_open("MEALS", O_CREAT, 0644, 0);
@@ -51,7 +52,7 @@ int			sdata_init(t_start *start, char **av, int ac)
 	return (1);
 }
 
-void 		philo_init(t_philo *philo, t_start *sdata)
+void		philo_init(t_philo *philo, t_start *sdata)
 {
 	int i;
 
@@ -63,6 +64,21 @@ void 		philo_init(t_philo *philo, t_start *sdata)
 		philo[i].meals = 0;
 		philo[i].stop = 0;
 	}
+}
+
+static void	par_proc(t_start *sdata, int *status)
+{
+	int	i;
+
+	i = -1;
+	while (++i < sdata->nb_philo)
+		sem_post(sdata->wait);
+	if (sdata->state[MEALS] > 0)
+	{
+		pthread_create(&sdata->counter, NULL, meals_counter, sdata);
+		pthread_join(sdata->counter, NULL);
+	}
+	waitpid(0, status, 0);
 }
 
 int			philo_create(t_philo *philo, t_start *sdata)
@@ -82,16 +98,6 @@ int			philo_create(t_philo *philo, t_start *sdata)
 			status = philo_routine(&philo[i]);
 	}
 	if (pid > 0)
-	{
-		i = -1;
-		while (++i < sdata->nb_philo)
-			sem_post(sdata->wait);
-		if (sdata->state[MEALS] > 0)
-		{
-			pthread_create(&sdata->counter, NULL, meals_counter, sdata);
-			pthread_join(sdata->counter, NULL);
-		}
-		waitpid(0, &status, 0);
-	}
+		par_proc(sdata, &status);
 	return (0);
 }

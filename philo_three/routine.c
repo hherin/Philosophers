@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:50:09 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/27 00:15:54 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/27 11:51:46 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		*meals_counter(void *args)
 
 static void	is_eating(t_philo *ph, t_start *sdata)
 {
-	sem_wait(sdata->fork);				//take fork 1
+	sem_wait(sdata->fork);
 	print_msg(" has taken a fork\n", ph->sdata, ph);
 	print_msg(" has taken a fork\n", ph->sdata, ph);
 	print_msg(" is eating\n", ph->sdata, ph);
@@ -73,13 +73,14 @@ static void	*time_counter(void *philo)
 	return (NULL);
 }
 
-int	philo_routine(t_philo *ph)
+int			philo_routine(t_philo *ph)
 {
 	pthread_t th_died;
 
 	sem_wait(ph->sdata->wait);
 	ph->sdata->time = ms_time();
-	pthread_create(&th_died, NULL, time_counter, &ph);
+	if (pthread_create(&th_died, NULL, time_counter, &ph))
+		return (p_error("Thread creation failed"));
 	while (!ph->stop)
 	{
 		is_eating(ph, ph->sdata);

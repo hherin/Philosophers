@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 21:42:22 by user42            #+#    #+#             */
-/*   Updated: 2020/11/26 23:41:02 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/27 11:44:42 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,8 @@
 # include <time.h>
 # include <signal.h>
 # include <semaphore.h>
-// # include <wait.h>
 # include <fcntl.h>
 
-#include <stdio.h>
 typedef struct	s_start
 {
 	long		time;
@@ -50,18 +48,18 @@ typedef struct	s_philo
 
 enum	e_state {DIE, EAT, SLEEP, MEALS};
 
-int		ft_atoi(const char *str);
-int		p_error(const char *s);
-long	ms_time(void);
-size_t	ft_strlen(const char *str);
-int		print_msg(const char *str, t_start *sdata, t_philo *ph);
-int		print_dead(const char *str, t_start *sdata, t_philo *ph);
-int		sdata_init(t_start *start, char **av, int ac);
-int		philo_create(t_philo *philo, t_start *sdata);
-void	philo_init(t_philo *philo, t_start *sdata);
-int		philo_routine(t_philo *philo);
-void	better_sleep(long d);
-void	*meals_counter(void *args);
-int		nblen(long nb);
+int				ft_atoi(const char *str);
+int				p_error(const char *s);
+long			ms_time(void);
+size_t			ft_strlen(const char *str);
+int				print_msg(const char *str, t_start *sdata, t_philo *ph);
+int				print_dead(const char *str, t_start *sdata, t_philo *ph);
+int				sdata_init(t_start *start, char **av, int ac);
+int				philo_create(t_philo *philo, t_start *sdata);
+void			philo_init(t_philo *philo, t_start *sdata);
+int				philo_routine(t_philo *philo);
+void			better_sleep(long d);
+void			*meals_counter(void *args);
+int				nblen(long nb);
 
 #endif

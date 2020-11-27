@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:50:09 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/26 21:13:51 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/27 11:32:30 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo2.h"
-
 
 static void	has_eaten_enough(t_philo *ph)
 {
@@ -33,7 +32,7 @@ static void	has_eaten_enough(t_philo *ph)
 
 static void	is_eating(t_philo *ph, t_start *sdata)
 {
-	sem_wait(sdata->fork);				//take fork 1
+	sem_wait(sdata->fork);
 	(!g_stop) ? print_msg(" has taken a fork\n", ph->sdata, ph) : 0;
 	(!g_stop) ? print_msg(" has taken a fork\n", ph->sdata, ph) : 0;
 	(!g_stop) ? print_msg(" is eating\n", ph->sdata, ph) : 0;
@@ -49,7 +48,7 @@ static void	is_sleeping(t_philo *ph, t_start *sdata)
 	better_sleep(ph->sdata->state[EAT] * 1000);
 }
 
-void	*time_counter(void *philo)
+void		*time_counter(void *philo)
 {
 	t_philo *ph;
 	t_start *data;
@@ -75,10 +74,10 @@ void	*time_counter(void *philo)
 	return (NULL);
 }
 
-void	*philo_routine(void *philo)
+void		*philo_routine(void *philo)
 {
-	t_philo *ph;
-	pthread_t th_died;
+	t_philo		*ph;
+	pthread_t	th_died;
 
 	ph = (t_philo*)philo;
 	while (!ph->sdata->start)

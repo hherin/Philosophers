@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 19:02:56 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/27 10:48:48 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/27 12:04:28 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void		*time_counter(void *philo)
 	while (!g_stop)
 	{
 		ph->time[1] = ms_time();
-		if (ph->time[1] - ph->time[0] > data->die)
+		if (ph->time[1] - ph->time[0] >= data->die)
 		{
 			pthread_mutex_lock(&data->stop);
 			if (!g_stop && data->counter)

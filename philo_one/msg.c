@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msg.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 13:05:17 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/26 20:47:45 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/27 11:07:00 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@ static void	digitcopy(char dest[100], long nb, int index, int nb_len)
 		nb_len--;
 	}
 }
+
 static void	stgcopy(char dest[100], const char *str, int index)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -35,10 +36,9 @@ static void	stgcopy(char dest[100], const char *str, int index)
 	}
 }
 
-
-int	print_msg(const char *str, t_start *sdata, t_philo *ph)
+int			print_msg(const char *str, t_start *sdata, t_philo *ph)
 {
-	long current_time;
+	long	current_time;
 	int		nb_len;
 	int		i;
 	char	msg[100];
@@ -56,22 +56,22 @@ int	print_msg(const char *str, t_start *sdata, t_philo *ph)
 	stgcopy(msg, str, nb_len);
 	if (pthread_mutex_lock(&sdata->print))
 		return (p_error("Print mutex lock issue"));
-	(!g_stop) ? write(1,msg, ft_strlen(msg)) : 0;
+	(!g_stop) ? write(1, msg, ft_strlen(msg)) : 0;
 	if (pthread_mutex_unlock(&sdata->print))
 		return (p_error("Print mutex unlock issue"));
 	return (1);
 }
 
-int p_error(const char *s)
+int			p_error(const char *s)
 {
 	write(2, s, ft_strlen(s));
 	write(2, "\n", 1);
 	return (0);
 }
 
-int	print_dead(const char *str, t_start *sdata, t_philo *ph)
+int			print_dead(const char *str, t_start *sdata, t_philo *ph)
 {
-	long current_time;
+	long	current_time;
 	int		nb_len;
 	int		i;
 	char	msg[100];
@@ -89,7 +89,7 @@ int	print_dead(const char *str, t_start *sdata, t_philo *ph)
 	stgcopy(msg, str, nb_len);
 	if (pthread_mutex_lock(&sdata->print))
 		return (p_error("Print mutex lock issue"));
-	write(1,msg, ft_strlen(msg));
+	write(1, msg, ft_strlen(msg));
 	if (pthread_mutex_unlock(&sdata->print))
 		return (p_error("Print mutex unlock issue"));
 	return (1);

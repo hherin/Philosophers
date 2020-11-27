@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 19:02:56 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/26 20:48:08 by user42           ###   ########.fr       */
+/*   Updated: 2020/11/27 10:48:48 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,16 @@ static void	has_eaten_enough(t_philo *ph)
 
 static void	is_eating(t_philo *ph, int id)
 {
-	int lock[2];
-	t_philo *ph_tab;
+	int		lock[2];
+	t_philo	*ph_tab;
 
 	ph_tab = (t_philo*)(ph->t_save);
-	lock[0] = (!(id % 2)) ? id + 1 : id;					// ph pairs prenne a gauche impairs = droite
+	lock[0] = (!(id % 2)) ? id + 1 : id;
 	(lock[0] == ph->sdata->nb_philo) ? lock[0] = 0 : 0;
 	lock[1] = (!(id % 2)) ? id : id - 1;
-	pthread_mutex_lock(&ph_tab[lock[0]].fork);				//take fork 1
+	pthread_mutex_lock(&ph_tab[lock[0]].fork);
 	print_msg(" has taken a fork\n", ph->sdata, ph);
-	pthread_mutex_lock(&ph_tab[lock[1]].fork);				//take fork 2
+	pthread_mutex_lock(&ph_tab[lock[1]].fork);
 	print_msg(" has taken a fork\n", ph->sdata, ph);
 	print_msg(" is eating\n", ph->sdata, ph);
 	has_eaten_enough(ph);
@@ -51,8 +51,8 @@ static void	is_eating(t_philo *ph, int id)
 
 static void	is_sleeping(t_philo *ph, int id)
 {
-	int unlock[2];
-	t_philo *ph_tab;
+	int		unlock[2];
+	t_philo	*ph_tab;
 
 	ph_tab = (t_philo*)(ph->t_save);
 	unlock[0] = (!(id % 2)) ? id + 1 : id;
@@ -64,7 +64,7 @@ static void	is_sleeping(t_philo *ph, int id)
 	better_sleep(ph->sdata->eat * 1000);
 }
 
-void	*time_counter(void *philo)
+void		*time_counter(void *philo)
 {
 	t_philo *ph;
 	t_start *data;
@@ -90,10 +90,10 @@ void	*time_counter(void *philo)
 	return (NULL);
 }
 
-void	*philo_routine(void *philo)
+void		*philo_routine(void *philo)
 {
-	t_philo *ph;
-	pthread_t th_died;
+	t_philo		*ph;
+	pthread_t	th_died;
 
 	ph = (t_philo*)philo;
 	while (!ph->sdata->start)

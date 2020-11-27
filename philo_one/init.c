@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 19:03:20 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/23 20:43:08 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/27 11:03:08 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern int	g_stop;
 
-static int		str_digit(const char *str)
+static int	str_digit(const char *str)
 {
 	while (*str)
 	{
@@ -25,7 +25,7 @@ static int		str_digit(const char *str)
 	return (1);
 }
 
-int	sdata_init(t_start *start, char **av, int ac)
+int			sdata_init(t_start *start, char **av, int ac)
 {
 	if (ac < 5)
 		return (p_error("Need arguments"));
@@ -40,13 +40,15 @@ int	sdata_init(t_start *start, char **av, int ac)
 	start->nb_meals = (ac > 5) ? ft_atoi(av[5]) : -1;
 	if (!start->nb_meals)
 		return (p_error("Number of meals can't be negative"));
-	pthread_mutex_init(&start->print, NULL);
-	pthread_mutex_init(&start->stop, NULL);
+	if (pthread_mutex_init(&start->print, NULL))
+		return (p_error("Mutex init failed"));
+	if (pthread_mutex_init(&start->stop, NULL))
+		return (p_error("Mutex init failed"));
 	start->counter = start->nb_philo;
 	return (1);
 }
 
-void	philo_init(t_philo **philo, t_start *sdata) // ret error
+int			philo_init(t_philo **philo, t_start *sdata)
 {
 	int i;
 
@@ -57,30 +59,33 @@ void	philo_init(t_philo **philo, t_start *sdata) // ret error
 		(*philo)[i].id = i;
 		(*philo)[i].t_save = (void*)(*philo);
 		(*philo)[i].meals = 0;
-		pthread_mutex_init(&((*philo)[i].fork), NULL);
-		pthread_mutex_init(&((*philo)[i].pick), NULL);
+		if (pthread_mutex_init(&((*philo)[i].fork), NULL))
+			return (p_error("Fork mutex initialisation failed"));
+		if (pthread_mutex_init(&((*philo)[i].pick), NULL))
+			return (p_error("Fork mutex initialisation failed"));
 	}
+	return (1);
 }
 
-void	pth_create(t_philo **philo, t_start *sdata)
+int			pth_create(t_philo **philo, t_start *sdata)
 {
 	int i;
 
 	i = -1;
 	sdata->start = 0;
-	while (++i < sdata->nb_philo) // creation des threads
-		pthread_create(&(*philo)[i].thrd, NULL, philo_routine, (void*)((*philo) + i));
+	while (++i < sdata->nb_philo)
+	{
+		if (pthread_create(&(*philo)[i].thrd, NULL, philo_routine, \
+			(void*)((*philo) + i)))
+			return (p_error("Thread creation failed"));
+	}
 	sdata->time = ms_time();
 	sdata->start = 1;
 	i = -1;
-	while (++i < sdata->nb_philo) // join les threads
-		pthread_join((*philo)[i].thrd, NULL);
-	i = -1;
 	while (++i < sdata->nb_philo)
 	{
-		pthread_mutex_destroy(&(*philo)[i].fork);
-		pthread_mutex_destroy(&(*philo)[i].pick);
+		if (pthread_join((*philo)[i].thrd, NULL))
+			return (p_error("Fail in joining threads"));
 	}
-	pthread_mutex_destroy(&sdata->print);
-	pthread_mutex_destroy(&sdata->stop);
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 19:03:20 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/27 11:57:03 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/28 12:38:08 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,32 @@ static int	str_digit(const char *str)
 	return (1);
 }
 
-int			sdata_init(t_start *start, char **av, int ac)
+static int	sem_create(t_start *start)
 {
-	if (ac < 5)
-		return (p_error("Need arguments"));
 	sem_unlink("FORK");
 	sem_unlink("PRINT");
 	sem_unlink("WAIT");
 	sem_unlink("MEALS");
 	sem_unlink("DIE");
-	if (!str_digit(av[1]) || !(start->nb_philo = ft_atoi(av[1])))
+	start->fork = sem_open("FORK", O_CREAT, 0644,\
+		(unsigned int)start->nb_philo / 2);
+	start->print = sem_open("PRINT", O_CREAT, 0644, 1);
+	start->wait = sem_open("WAIT", O_CREAT, 0644, 0);
+	start->meals = sem_open("MEALS", O_CREAT, 0644, 0);
+	start->die = sem_open("DIE", O_CREAT, 0644, 1);
+	if (start->fork == SEM_FAILED || start->print == SEM_FAILED ||
+		start->die == SEM_FAILED || start->wait == SEM_FAILED ||
+		start->meals == SEM_FAILED)
+		return (p_error("Sem_open failed"));
+	return (1);
+}
+
+int			sdata_init(t_start *start, char **av, int ac)
+{
+	if (ac < 5)
+		return (p_error("Need arguments"));
+	if (!str_digit(av[1]) || !(start->nb_philo = ft_atoi(av[1])) ||
+		start->nb_philo > 200)
 		return (p_error("Wrong philosopher input"));
 	if (!str_digit(av[2]) || !(start->state[DIE] = ft_atoi(av[2])))
 		return (p_error("Wrong died input"));
@@ -45,10 +61,8 @@ int			sdata_init(t_start *start, char **av, int ac)
 		return (p_error("Number of meals can't be negative"));
 	start->fork = sem_open("FORK", O_CREAT, 0644,\
 		(unsigned int)start->nb_philo / 2);
-	start->print = sem_open("PRINT", O_CREAT, 0644, 1);
-	start->wait = sem_open("WAIT", O_CREAT, 0644, 0);
-	start->meals = sem_open("MEALS", O_CREAT, 0644, 0);
-	start->die = sem_open("DIE", O_CREAT, 0644, 1);
+	if (!sem_create(start))
+		return (0);
 	return (1);
 }
 

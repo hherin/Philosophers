@@ -6,7 +6,7 @@
 /*   By: heleneherin <heleneherin@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 19:03:20 by heleneherin       #+#    #+#             */
-/*   Updated: 2020/11/27 11:36:51 by heleneherin      ###   ########.fr       */
+/*   Updated: 2020/11/28 12:32:54 by heleneherin      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int			sdata_init(t_start *start, char **av, int ac)
 {
 	if (ac < 5)
 		return (p_error("Need arguments"));
-	if (!str_digit(av[1]) || !(start->nb_philo = ft_atoi(av[1])))
+	if (!str_digit(av[1]) || !(start->nb_philo = ft_atoi(av[1])) ||
+		start->nb_philo > 200)
 		return (p_error("Wrong philosopher input"));
 	if (!str_digit(av[2]) || !(start->state[DIE] = ft_atoi(av[2])))
 		return (p_error("Wrong died input"));
